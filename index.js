@@ -9,10 +9,21 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 const path = require("path");
 
+const allowedOrigins = process.env.FRONTEND_URL.split(",");
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, 
-  credentials: true, 
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 };
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
