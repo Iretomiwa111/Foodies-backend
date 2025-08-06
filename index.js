@@ -1,4 +1,3 @@
-// require("dotenv").config();
 require("dotenv").config();
 
 const express = require("express");
@@ -7,18 +6,25 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
+
 const path = require("path");
 
-const allowedOrigins = process.env.FRONTEND_URL.split(",");
+const allowedOrigins = [
+  "https://foodies-restaurant-delta.vercel.app",
+  "http://localhost:5173",
+];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+    console.log("CORS origin:", origin);  // <== Add this line to log origin
+
+    if (!origin) return callback(null, true); // Allow requests like Postman with no origin
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
     } else {
-      return callback(new Error("Not allowed by CORS"));
+      console.log("Blocked CORS origin:", origin);  // <== Add this to log blocked origins
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
@@ -28,9 +34,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
-
-const authRoute = require("./src/routes/auth.route")
-const userRoute = require("./src/routes/user.route")
+const authRoute = require("./src/routes/auth.route");
+const userRoute = require("./src/routes/user.route");
 const reservationRoutes = require("./src/routes/reservation.route");
 const orderRoutes = require("./src/routes/order.route");
 const menuRoutes = require("./src/routes/menu.route");
