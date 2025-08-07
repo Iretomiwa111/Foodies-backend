@@ -28,7 +28,7 @@ app.use(cors({
     "https://localhost:5000",
     "http://localhost:5173",
     "https://foodies-restaurant-delta.vercel.app"
-   ],
+   ]
      credentials: true
 }));
 app.use(express.json());
