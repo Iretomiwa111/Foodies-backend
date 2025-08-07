@@ -6,32 +6,29 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
+app.use(cors(corsOptions));
+app.use(express.json());
 
 const path = require("path");
 
-// const allowedOrigins = process.env.FRONTEND_URL.split(",");
+const allowedOrigins = process.env.FRONTEND_URL.split(",");
 
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-//   credentials: true,
-// };
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
-app.use(cors({
-   origin:[
-    "https://localhost:5000",
-    "http://localhost:5173",
-    "https://foodies-restaurant-delta.vercel.app"
-   ],
-     credentials: true
-}));
-app.use(express.json());
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 const authRoute = require("./src/routes/auth.route");
