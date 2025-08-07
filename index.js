@@ -16,19 +16,15 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log("CORS origin:", origin);  // <== Add this line to log origin
-
-    if (!origin) return callback(null, true); // Allow requests like Postman with no origin
-
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
     } else {
-      console.log("Blocked CORS origin:", origin);  // <== Add this to log blocked origins
-      callback(new Error("Not allowed by CORS"));
+      return callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true,
+  credentials: true, 
 };
+
 
 app.use(cors(corsOptions));
 app.use(express.json());
