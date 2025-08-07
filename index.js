@@ -9,24 +9,27 @@ app.use(cookieParser());
 
 const path = require("path");
 
-const allowedOrigins = [
-  "https://foodies-restaurant-delta.vercel.app",
-  "http://localhost:5173",
-];
+// const allowedOrigins = process.env.FRONTEND_URL.split(",");
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true, 
-};
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   credentials: true,
+// };
 
 
-app.use(cors(corsOptions));
+app.use(cors({
+   origin:[
+    "https://localhost:5000",
+    "http://localhost:5173",
+    "https://foodies-restaurant-delta.vercel.app"
+   ]
+}));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
