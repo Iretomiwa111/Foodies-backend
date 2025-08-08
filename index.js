@@ -6,8 +6,6 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
-app.use(cors(corsOptions));
-app.use(express.json());
 
 const path = require("path");
 
@@ -28,6 +26,8 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
+app.use(cors(corsOptions));
+app.use(express.json());
 
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
