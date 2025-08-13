@@ -38,22 +38,19 @@ const orderRoutes = require("./src/routes/order.route");
 const menuRoutes = require("./src/routes/menu.route");
 const cartRoutes = require("./src/routes/cart.route");
 const verifyPasswordRoute = require("./src/routes/verify-password.route");
-// const forgotPasswordRoute = require("./src/routes/forgot-password.route");
-// const resetPasswordRoute = require("./src/routes/reset-password.route");
 
 app.get("/", (req, res) => {
   res.send("HEllo Client");
 });
 
 app.use("/api/v1/auth", authRoute);
+console.log("Auth routes loaded");
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/reservations", reservationRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/menu", menuRoutes);
 app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/verify-password", verifyPasswordRoute);
-// app.use("/api/v1/forgot-password", forgotPasswordRoute);
-// app.use("/api/v1/reset-password", resetPasswordRoute);
 
 app.use((req, res) => {
   res.status(404).send("404 page");
