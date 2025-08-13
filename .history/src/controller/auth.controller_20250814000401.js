@@ -146,7 +146,7 @@ exports.logoutUser = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: isProduction,
-     sameSite: "None",
+    sameSite: isProduction ? "None" : "Lax",
   });
 
   res.status(200).json({ message: "Logged out successfully" });

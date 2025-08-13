@@ -39,7 +39,7 @@ exports.registerUser = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: "None",
+      sameSite: isProduction ? "None" : "Lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -120,7 +120,7 @@ exports.loginUser = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: isProduction,
-       sameSite: "None",
+      sameSite: isProduction ? "None" : "Lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -146,7 +146,7 @@ exports.logoutUser = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: isProduction,
-     sameSite: "None",
+    sameSite: isProduction ? "None" : "Lax",
   });
 
   res.status(200).json({ message: "Logged out successfully" });
@@ -167,8 +167,10 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 mins
     await user.save();
 
+    // Reset URL (frontend)
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
+    // Send Email
     await sendEmail({
       to: user.email,
       subject: "Password Reset",
